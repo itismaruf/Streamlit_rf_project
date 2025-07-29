@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, roc_auc_score, roc_curve
 
 st.set_page_config(page_title="Titanic Data Overview", layout="wide")
-st.title("🚢 Titanic - Анализ данных")
+st.title("Titanic - Анализ данных")
 
 st.subheader("Загрузка данных")
 df = pd.read_csv("cleaned_titanic.csv")
@@ -46,7 +46,7 @@ fig_age = px.histogram(df, x="Age", color="Survived", nbins=30,
 st.plotly_chart(fig_age, use_container_width=True)
 
 
-st.subheader("🤖 Обучение модели")
+st.subheader("Обучение модели")
 
 with st.expander("⚙️ Настройки модели", expanded=True):
     n_estimators = st.slider("Количество деревьев (n_estimators)", 10, 500, 100, step=10)
@@ -62,8 +62,8 @@ df = pd.get_dummies(df, columns=['Sex', 'Embarked'], drop_first=True)
 X = df.drop("Survived", axis=1)
 y = df["Survived"]
 
-# 1) Кнопка для первичного обучения
-if st.button("🚀 Обучить модель"):
+# 1) Кнопка для обучения
+if st.button("Обучить модель"):
     # разбиение и обучение
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=random_state
@@ -126,14 +126,13 @@ if st.button("🚀 Обучить модель"):
 # 2) После успешного обучения: выводим метрики и графики, и Expander для утечек
 if st.session_state.get('trained', False):
     col1, col2 = st.columns(2)
-    col1.metric("🎯 Test Accuracy", f"{st.session_state.test_acc:.2%}")
+    col1.metric("Test Accuracy", f"{st.session_state.test_acc:.2%}")
     col2.metric("📈 ROC AUC",       f"{st.session_state.roc_auc:.3f}")
 
     # визуализация
     st.plotly_chart(st.session_state.fig_imp, use_container_width=True)
     st.plotly_chart(st.session_state.fig_roc, use_container_width=True)
 
-    # expander для выбора признаков-утечек
     with st.expander("💡 Удалить признаки-утечки и переобучить", expanded=True):
         leak_features = st.multiselect(
             "Выберите подозрительные признаки:",
@@ -162,10 +161,10 @@ if st.session_state.get('trained', False):
             # сравнение метрик
             col1, col2 = st.columns(2)
             with col1:
-                st.metric("📈 AUC с утечкой",      f"{st.session_state.roc_auc:.3f}")
-                st.metric("🎯 Acc с утечкой",      f"{st.session_state.test_acc:.2%}")
+                st.metric("AUC с утечкой",      f"{st.session_state.roc_auc:.3f}")
+                st.metric("Acc с утечкой",      f"{st.session_state.test_acc:.2%}")
             with col2:
-                st.metric("🔐 AUC без утечек",    f"{roc2:.3f}")
+                st.metric("AUC без утечек",    f"{roc2:.3f}")
                 st.metric("✅ Acc без утечек",     f"{acc2:.2%}")
 
-            st.success("✅ Модель без утечек обучена и метрики обновлены!")
+            st.success("Модель без утечек обучена и метрики обновлены!")
