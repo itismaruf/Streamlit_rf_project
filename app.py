@@ -9,7 +9,7 @@ st.set_page_config(page_title="Titanic Data Overview", layout="wide")
 st.title("🚢 Titanic - Анализ данных")
 
 st.subheader("Загрузка данных")
-df = pd.read_csv("/Users/mac/Desktop/Папки/AI bootcamp/streamlit_project/cleaned_titanic.csv")
+df = pd.read_csv("cleaned_titanic.csv")
 
 st.write("Случайные 5 строк из датасета:")
 st.dataframe(df.sample(5), use_container_width=True)
